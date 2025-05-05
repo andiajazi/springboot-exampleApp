@@ -6,14 +6,10 @@ import jakarta.validation.Valid;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import com.example.service.CustomerService;
-
 import java.util.List;
 
-//Implement Put method
-//Implement condition to check if existing email for Put/Post
-
 @RestController
-@RequestMapping("api/v1/customers")
+@RequestMapping("api/v1/customers/")
 public class CustomerController {
 
     private final CustomerService customerService;
@@ -23,8 +19,13 @@ public class CustomerController {
     }
 
     @GetMapping
-    public List<Customer> getCustomers() {
+    public List<CustomerDto> getCustomers() {
         return customerService.getCustomers();
+    }
+
+    @GetMapping("{customerId}")
+    public CustomerDto getCustomerByID(@PathVariable("customerId") Integer customerId) {
+        return customerService.getCustomerByID(customerId);
     }
 
     @PostMapping
@@ -33,14 +34,14 @@ public class CustomerController {
     }
 
     @DeleteMapping("{customerId}")
-    public void deleteCustomer(@PathVariable("customerId") Integer id) {
-        customerService.deleteCustomer(id);
+    public void deleteCustomer(@PathVariable("customerId") Integer customerId) {
+        customerService.deleteCustomer(customerId);
     }
 
     @PutMapping("{customerId}")
-    public void updateCustomer(@PathVariable("customerId") Integer id,
+    public void updateCustomer(@PathVariable("customerId") Integer customerId,
                                @RequestBody @Valid CustomerDto customerDto)  {
-        customerService.updateCustomer(id, customerDto);
+        customerService.updateCustomer(customerId, customerDto);
     }
 
 }

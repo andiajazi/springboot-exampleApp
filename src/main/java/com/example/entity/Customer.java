@@ -5,27 +5,37 @@ import jakarta.persistence.*;
 import java.util.Objects;
 
 @Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class Customer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private Integer age;
-    private String f_name;
-    private String email;
-    private String l_name;
-    private String phone;
+    private String firstName;
+    private String lastName;
 
-    public Customer(Integer id, Integer age, String f_name, String email, String l_name, String phone) {
+
+    public Customer(Integer id, Integer age, String firstName, String lastName) {
         this.id = id;
         this.age = age;
-        this.f_name = f_name;
-        this.email = email;
-        this.l_name = l_name;
-        this.phone = phone;
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
 
     public Customer() {
+    }
+
+    @OneToOne
+    @JoinColumn(name = "contact_id")
+    private Contact contact;
+
+    public Contact getContact() {
+        return contact;
+    }
+
+    public void setContact(Contact contact) {
+        this.contact = contact;
     }
 
     public Integer getId() {
@@ -44,62 +54,43 @@ public class Customer {
         this.age = age;
     }
 
-    public String getF_name() {
-        return f_name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setF_name(String f_name) {
-        this.f_name = f_name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getEmail() {
-        return email;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public String getLastName() {
+        return lastName;
     }
 
-    public String getL_name() {
-        return l_name;
-    }
-
-    public void setL_name(String l_name) {
-        this.l_name = l_name;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Customer customer = (Customer) o;
-        return Objects.equals(id, customer.id) && Objects.equals(age, customer.age) && Objects.equals(f_name, customer.f_name)
-                && Objects.equals(email, customer.email) && Objects.equals(l_name, customer.l_name) && Objects.equals(phone, customer.phone);
+        return Objects.equals(id, customer.id) && Objects.equals(age, customer.age) && Objects.equals(firstName, customer.firstName) && Objects.equals(lastName, customer.lastName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, age, f_name, l_name, email, phone);
+        return Objects.hash(id, age, firstName, lastName);
     }
 
     @Override
     public String toString() {
         return "Customer{" +
                 "id=" + id +
-                ", first_name='" + f_name + '\'' +
-                ", last_name='" + l_name + '\'' +
-                ", phone='" + phone + '\'' +
                 ", age=" + age +
-                ", email='" + email + '\'' +
+                ", f_name='" + firstName + '\'' +
+                ", l_name='" + lastName + '\'' +
                 '}';
     }
-
 }
